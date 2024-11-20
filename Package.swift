@@ -28,7 +28,7 @@ if ProcessInfo.processInfo.environment["SPI_BUILDER"] == "1" {
 }
 
 let package = Package(
-    name: "GRDB",
+    name: "GRDBMac",
     defaultLocalization: "en", // for tests
     platforms: [
         .iOS(.v13),
@@ -37,25 +37,26 @@ let package = Package(
         .watchOS(.v7),
     ],
     products: [
-        .library(name: "GRDBSQLite", targets: ["GRDBSQLite"]),
-        .library(name: "GRDB", targets: ["GRDB"]),
-        .library(name: "GRDB-dynamic", type: .dynamic, targets: ["GRDB"]),
+        .library(name: "GRDBSQLiteMac", targets: ["GRDBSQLiteMac"]),
+        .library(name: "GRDBMac", targets: ["GRDBMac"]),
+        .library(name: "GRDBMac-dynamic", type: .dynamic, targets: ["GRDBMac"]),
     ],
     dependencies: dependencies,
     targets: [
         .systemLibrary(
-            name: "GRDBSQLite",
+            name: "GRDBSQLiteMac",
+            path: "Sources/GRDBSQLite",
             providers: [.apt(["libsqlite3-dev"])]),
         .target(
-            name: "GRDB",
-            dependencies: ["GRDBSQLite"],
+            name: "GRDBMac",
+            dependencies: ["GRDBSQLiteMac"],
             path: "GRDB",
             resources: [.copy("PrivacyInfo.xcprivacy")],
             cSettings: cSettings,
             swiftSettings: swiftSettings),
         .testTarget(
             name: "GRDBTests",
-            dependencies: ["GRDB"],
+            dependencies: ["GRDBMac"],
             path: "Tests",
             exclude: [
                 "CocoaPods",
